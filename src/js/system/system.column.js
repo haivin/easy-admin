@@ -1,26 +1,32 @@
+import {routerGoto,} from '../common/system.utils'
 export let dataUrl = '/system/table/${tableId}/column'
 export let detailUrl = this.dataUrl+'/${columnId}'
 export let saveUrl = this.dataUrl
-export let tableId = 'ecf4d0fb63ce11e880e70215d3c54da1'
+export let tableId = '772307718662234112'
 
 export let tableOperator = [
-    {'size': 'mini', 'type': '', 'action': 'detail', 'text': '查看'},
-    {'size': 'mini', 'type': '', 'action': 'edit', 'text': '编辑'},
-    {'size': 'mini', 'type': 'danger', 'action': 'delete', 'text': '删除'}]
+    {'size': 'mini', 'type': '', 'text': '查看',
+        'click':function(vue, index, row){
+            routerGoto(vue,'tableColumnDetail',{tableId: row.tableInfoId,columnId: row.id});}},
+    {'size': 'mini', 'type': '', 'text': '编辑',
+        'click':function(vue, index, row){
+            routerGoto(vue,'tableColumnEdit',{tableId: row.tableInfoId,columnId: row.id});}},
+    {'size': 'mini', 'type': 'danger', 'text': '删除',
+        'click':function(vue, index, row){}}]
 
 export let operator = [
     {'size': 'medium', 'type': 'primary', 'action': 'submit', 'text': '提交'},
     {'size': 'medium', 'type': 'success', 'action': 'reset', 'text': '重置'}]
 
 // 表格操作按钮对应的事件
-export function handle(vue, action, index, row) {
+export function tableHandle(vue, action, index, row) {
     console.log(row)
     switch (action) {
         case 'detail':
-            this.routerGoto(vue,'tableColumnDetail',{tableId: row.tableId,columnId: row.columnId});
+            routerGoto(vue,'tableColumnDetail',{tableId: row.tableInfoId,columnId: row.id});
             break;
         case 'edit':
-            this.routerGoto(vue,'tableColumnEdit',{tableId: row.tableId,columnId: row.columnId});
+            routerGoto(vue,'tableColumnEdit',{tableId: row.tableInfoId,columnId: row.id});
             break;
         case 'delete':
             break;

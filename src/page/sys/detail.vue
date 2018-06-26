@@ -1,29 +1,13 @@
 <template>
-    <div class="fillcontain" style="padding: 15px;" v-loading.fullscreen.lock="fullscreenLoading">
+    <div class="fillcontain" style="padding: 15px;">
         <div class="navTop" style="margin-bottom: 15px">
             系统管理
         </div>
         <div class="fillcontain">
             <template>
-                <el-form>
-                    <div v-for="label in labels">
-                        <el-form-item :label="label.title" prop="age"
-                                      v-if="label.type in {'text':'','password':'','color':'','date':'','datetime':'','datetime-local':'','month':'','week':'','time':'','email':'','hidden':'','number':'','tel':'','url':''}">
-                            <el-input :readonly="false" type="label.type" placeholder="请输入内容"
-                                      v-model="detail[label.entityName]"></el-input>
-                        </el-form-item>
-                    </div>
-                    <el-button v-if="editable" v-for="(ele, i) in operator" :key="i"
-                               :size="ele.size"
-                               :type="ele.type"
-                               @click="conf.detailHandle(_this,ele.action,detail)">{{ele.text}}
-                    </el-button>
-                </el-form>
-
-
-                <!--<div class="layui-input-block" v-if="label.type in {'text':'','password':'','color':'','date':'','datetime':'','datetime-local':'','month':'','week':'','time':'','email':'','hidden':'','number':'','tel':'','url':''}">
-                    <input :type="label.type" :name="label.entityName" lay-verify="label.entityName" autocomplete="off" class="layui-input" :value="detail[label.entityName]">
-                </div>-->
+                <form-view :columnUrl="columnUrl" :detailUrl="detailUrl" :editable="editable"
+                           :params="params" :operator="operator" :conf="conf" :saveUrl="saveUrl"
+                           :formHandle="formHandle"></form-view>
             </template>
         </div>
     </div>
@@ -47,8 +31,11 @@
 <script type="text/ecmascript-6">
     //    import * as conf from '../../js/system/detail.system.table'
     import * as confMap from '../../js/common/list.map'
+    import formView from '../../components/formView'
+    import {getColumnData,getDetailData,saveData,formHandle,buildUrl} from '../../js/common/system.utils'
 
     var conf = {}
+    var params = {}
     export default {
         props: {
             moduleConfig: {
@@ -60,38 +47,35 @@
                 default: false
             }
         },
-        data() {
+        data(){
             conf = confMap.getConfig(this.moduleConfig)
-            console.log(this.moduleConfig)
-            console.log(conf)
+            let operator = conf.moduleConfig.operator
+            let tableId = conf.moduleConfig.tableId || this.$route.params['tableId']
+                || this.$route.query['tableId']
+            let columnUrl = buildUrl(conf.moduleConfig.columnUrl,{'tableId':tableId})
+            tableId = this.$route.params['tableId'] || this.$route.query['tableId']
+                || conf.moduleConfig.tableId
+            params["tableId"] = tableId
+            let detailUrl = buildUrl(conf.moduleConfig.detailUrl,params,this.$route)
+            let saveUrl = buildUrl(conf.moduleConfig.saveUrl,params,this.$route)
             return {
-                _this: this,
-                labels: {},
-                detail: {},
-                operator: [],
-                fullscreenLoading: false,
+                conf:conf,
+                formHandle:formHandle,
+                operator: operator,
+                columnUrl: columnUrl,
+                detailUrl: detailUrl,
+                saveUrl: saveUrl,
+                params: params,
             }
         },
         mounted() {
-            this.initData()
         },
         created() {
         },
         methods: {
-            initData: function () {
-                this._this = this
-                this.operator = conf.moduleConfig.operator
-                this.conf = conf
-                conf.getColumnData(this, function (data, obj) {
-                    obj.labels = data.resultInfo.list
-                    obj.getData()
-                })
-            },
-            getData: function () {
-                conf.getDetailData(this, function (data, obj) {
-                    obj.detail = data.resultInfo
-                })
-            }
+        },
+        components: {
+            formView,
         }
     }
 </script>

@@ -2,6 +2,7 @@ import * as tools from './tools'
 import * as config from './list.default'
 import * as systemTable from '../system/system.table'
 import * as systemTableColumn from '../system/system.column'
+import * as systemMenu from '../system/system.menu'
 
 export function getConfig(param) {
     let moduleConfig = {}
@@ -11,6 +12,9 @@ export function getConfig(param) {
             break;
         case 'systemTableColumn':
             moduleConfig = systemTableColumn
+            break;
+        case 'systemMenu':
+            moduleConfig = systemMenu
             break;
     }
     var configCopy = tools.deepCopy(config)

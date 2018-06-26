@@ -5,8 +5,9 @@
                 <el-menu :default-active="defaultActive" style="min-height: 100%;" theme="dark" router>
                     <el-submenu index="1">
                         <template slot="title"><i class="el-icon-document"></i>系统管理</template>
-                        <el-menu-item index="/home/table">系统表</el-menu-item>
-                        <el-menu-item index="serveBrand">服务分类</el-menu-item>
+                        <el-menu-item index="/system/table">系统表</el-menu-item>
+                        <el-menu-item index="/system/menu">菜单管理</el-menu-item>
+                        <el-menu-item index="/system/view">页面管理</el-menu-item>
                     </el-submenu>
                 </el-menu>
             </el-col>
@@ -22,7 +23,12 @@
 
 <script>
     import headTop from '../components/headTop'
+//    import {getColumnData} from '../js/common/system.utils'
     export default {
+
+//        mounted() {
+//            getColumnData('/system/table/${tableId}/column',{'tableId':'772307719036981248'})
+//        },
         computed: {
             defaultActive: function () {
                 return this.$route.path;

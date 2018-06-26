@@ -16,6 +16,11 @@ const routes = [
         path: '/home',
         component: home,
         name: 'home',
+    },
+    {
+        path: '/system',
+        component: home,
+        name: 'system',
         children: [{
             path: '',
             component: table,
@@ -56,7 +61,22 @@ const routes = [
             name: 'tableColumnEdit',
             meta: ['列详情编辑'],
             props: {moduleConfig: 'systemTableColumn',editable: true}
-        }]
+        },{
+            path: 'menu',
+            component: table,
+            name: 'systemMenu',
+            props: {moduleConfig: 'systemMenu'}
+        },{
+            path: 'view',
+            component: detail,
+            name: 'systemMenuDetail',
+            props: {moduleConfig: 'systemMenu'}
+        },{
+            path: 'view',
+            component: detail,
+            name: 'systemMenuEdit',
+            props: {moduleConfig: 'systemMenu',editable: true}
+        },]
     }
 ]
 

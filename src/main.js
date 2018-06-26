@@ -5,7 +5,6 @@ import store from './store/'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css';
 import axios from 'axios'
-import qs from 'qs'
 import {post,fetch,patch,put} from './js/http'
 
 Vue.config.productionTip = false;
@@ -18,6 +17,7 @@ Vue.prototype.$post=post;
 Vue.prototype.$fetch=fetch;
 Vue.prototype.$patch=patch;
 Vue.prototype.$put=put;
+
 new Vue({
 	el: '#app',
 	router,
