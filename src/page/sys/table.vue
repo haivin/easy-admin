@@ -5,8 +5,10 @@
         </div>
         <div class="fillcontain">
             <table-view :columnUrl="columnUrl" :dataUrl="dataUrl"
-                :tableOperator="tableOperator"
-                :pagination="pagination" :params="params"></table-view>
+                :tableOperator="tableOperator" :params="params"
+                :hasFilter="hasFilter"
+                :filterLableUrl="filterLableUrl" :filterOperator="filterOperator">
+            </table-view>
         </div>
     </div>
 </template>
@@ -33,12 +35,14 @@
             moduleConfig:{
                 type: String,
                 default: 'default'
+            },
+            hasFilter:{
+                type: Boolean,
+                default: false
             }
         },
         data(){
             conf = confMap.getConfig(this.moduleConfig)
-            params['pageNum'] = conf.moduleConfig.pagination.pageNum
-            params['pageSize'] = conf.moduleConfig.pagination.pageSize
             let tableOperator = conf.moduleConfig.tableOperator
             let tableId = conf.moduleConfig.tableId || this.$route.params['tableId']
                 || this.$route.query['tableId']
@@ -49,10 +53,12 @@
             let dataUrl = buildUrl(conf.moduleConfig.dataUrl,params,this.$route)
             return {
                 tableOperator: tableOperator,
-                pagination:conf.moduleConfig.pagination,
+//                pagination:conf.moduleConfig.pagination,
                 columnUrl: columnUrl,
                 dataUrl: dataUrl,
+                filterLableUrl: columnUrl,
                 params: params,
+                filterOperator: conf.moduleConfig.filterOperator,
             }
         },
         mounted() {
@@ -62,7 +68,7 @@
         methods: {
         },
         components: {
-            tableView,
+            tableView
         }
     }
 </script>

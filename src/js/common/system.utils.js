@@ -51,7 +51,7 @@ export function buildUrl(url, params = {'tableId': ''},router={}) {
 }
 
 
-export function getColumnData(url, tableId, callback = function () {
+/*export function getColumnData(url, tableId, callback = function () {
 }) {
     let params = {'tableId': tableId}
     url = buildUrl(url, params);
@@ -65,12 +65,12 @@ export function getColumnData(url, tableId, callback = function () {
             console.error(response)
         }
     )
-}
+}*/
 
 
-export function getColumnData2(url, callback = function () {
+export function getColumnData(url, callback = function () {
 }) {
-    console.log('getColumnData2 url--->' + url)
+    console.log('getColumnData url--->' + url)
     http.fetch(url, null)
         .then(function (json) {
                 callback(json)
@@ -85,8 +85,6 @@ export function getColumnData2(url, callback = function () {
 export function getData(url, params, callback = function () {
 }) {
     // url = buildUrl(url, params);
-    params['pageNum'] = params['pageNum'] || 1
-    params['pageSize'] = params['pageSize'] || 10
     console.log('getData url--->' + url)
     console.log(url)
     console.log('params--->')

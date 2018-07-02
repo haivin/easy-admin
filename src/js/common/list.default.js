@@ -18,12 +18,5 @@ export let moduleConfig = {
         pageSize : 5,
         total : 0,
         layout : "total, prev, pager, next, jumper",
-        handleSizeChange: function (val) {
-            console.log(`每页 ${val} 条`);
-        },
-        handleCurrentChange: function (val) {
-            console.log(`当前页: ${val}`);
-            this.currentPage = val
-        },
     }
 }

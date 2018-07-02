@@ -7,7 +7,7 @@
             <template>
                 <form-view :columnUrl="columnUrl" :detailUrl="detailUrl" :editable="editable"
                            :params="params" :operator="operator" :conf="conf" :saveUrl="saveUrl"
-                           :formHandle="formHandle"></form-view>
+                           :formHandle="formHandle" :toObtainData="toObtainData"></form-view>
             </template>
         </div>
     </div>
@@ -45,6 +45,10 @@
             editable: {
                 type: Boolean,
                 default: false
+            },
+            toObtainData: {
+                type: Boolean,
+                default: true
             }
         },
         data(){

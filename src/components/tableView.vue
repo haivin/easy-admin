@@ -1,5 +1,23 @@
 <template>
     <div>
+        <el-form v-if="hasFilter" :inline="true" label-position="right" label-width="70px" :model="params">
+            <el-form-item v-for="(label,index) in labels" :key="index"
+                          :prop="label.propertyName" :label="label.title"
+                          v-if="label.type in {'text':'','password':'','color':'','date':'',
+                          'datetime':'','datetime-local':'','month':'','week':'','time':'',
+                          'email':'','hidden':'','number':'','tel':'','url':''}">
+                <el-input :readonly="false" type="label.type" placeholder="请输入内容"
+                          v-model="params[label.propertyName]"></el-input>
+            </el-form-item>
+            <el-row type="flex" justify="end" style="width: 98%;margin-bottom: 10px">
+                <el-button v-for="(ele, i) in filterOperator" :key="i"
+                           :size="ele.size"
+                           :type="ele.type"
+                           @click="ele.click(_this,params,getTableData)">
+                    {{ele.text}}
+                </el-button>
+            </el-row>
+        </el-form>
         <el-table
             :data="tableData"
             border
@@ -13,8 +31,7 @@
                              v-if="tableTitle.length>0 && tableOperator && tableOperator instanceof Array && tableOperator.length>0">
                 <template slot-scope="scope">
                     <el-button v-for="(ele, i) in tableOperator" :key="i"
-                               :size="ele.size"
-                               :type="ele.type"
+                               :size="ele.size" :type="ele.type"
                                @click="ele.click(_this,scope.$index, scope.row)"
                     >{{ele.text}}
                     </el-button>
@@ -35,15 +52,18 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {getColumnData2,getData} from '../js/common/system.utils'
+    import {getColumnData,getData} from '../js/common/system.utils'
+    import {pagination} from '../js/common/default.conf'
     var _this = {}
     export default {
         props: [
-            'tableOperator',
-            'pagination',
+            'filterLableUrl',
+            'filterOperator',
             'columnUrl',
             'dataUrl',
+            'tableOperator',
             'params',
+            'hasFilter',
         ],
         data() {
             return {
@@ -51,21 +71,36 @@
                 fullscreenLoading: false,
                 tableData: [],
                 tableTitle: [],
+                labels: [],
+                pagination: pagination,
             }
         },
         mounted() {
             this._this = this
+            this.pagination = pagination
             _this = this
             this.initData()
         },
         methods: {
             initData: function () {
-                getColumnData2(_this.columnUrl , function (data) {
+                if(this.hasFilter){
+                    getData(_this.filterLableUrl,{},function (data) {
+                        _this.labels = data.resultInfo.list
+                    })
+                }
+                getColumnData(_this.columnUrl , function (data) {
                     _this.tableTitle = data.resultInfo.list
                     _this.getTableData()
                 })
             },
             getTableData: function(){
+                for (let key in _this.params) {
+                    if(_this.params[key]==""){
+                        delete _this.params[key]
+                    }
+                }
+                _this.params['pageSize'] = pagination.pageSize
+                _this.params['pageNum'] = pagination.pageNum
                 getData(_this.dataUrl,_this.params,function (data) {
                     _this.tableData = data.resultInfo.list
                     _this.pagination.total = data.resultInfo.total

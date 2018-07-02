@@ -7,7 +7,12 @@ const login = r => require.ensure([], () => r(require('@/page/login')), 'login')
 const home = r => require.ensure([], () => r(require('@/page/home')), 'home');
 const table = r => require.ensure([], () => r(require('@/page/sys/table')), 'table');
 const detail = r => require.ensure([], () => r(require('@/page/sys/detail')), 'detail');
+const dynamic = r => require.ensure([], () => r(require('@/page/dynamic')), 'dynamic');
 const routes = [
+    {
+        path: '/test',
+        component: dynamic
+    },
     {
         path: '/',
         component: login
@@ -65,17 +70,22 @@ const routes = [
             path: 'menu',
             component: table,
             name: 'systemMenu',
-            props: {moduleConfig: 'systemMenu'}
+            props: {moduleConfig: 'systemMenu',hasFilter: true}
         },{
-            path: 'view',
+            path: 'menu/detail',
             component: detail,
             name: 'systemMenuDetail',
             props: {moduleConfig: 'systemMenu'}
         },{
-            path: 'view',
+            path: 'menu/edit',
             component: detail,
             name: 'systemMenuEdit',
             props: {moduleConfig: 'systemMenu',editable: true}
+        },{
+            path: 'menu/add',
+            component: detail,
+            name: 'systemMenuAdd',
+            props: {moduleConfig: 'systemMenu',editable: true, toObtainData: false}
         },]
     }
 ]

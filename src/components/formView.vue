@@ -1,5 +1,5 @@
 <template>
-    <el-form  v-loading.fullscreen.lock="fullscreenLoading">
+    <el-form v-loading.fullscreen.lock="fullscreenLoading">
         <div v-for="label in labels">
             <el-form-item :label="label.title" :prop="label.propertyName"
                           v-if="label.type in {'text':'','password':'','color':'','date':'',
@@ -28,10 +28,11 @@
 
 
 <script type="text/ecmascript-6">
-    import {getColumnData2,getDetailData,formHandle,saveData} from '../js/common/system.utils'
+    import {getColumnData,getDetailData,formHandle,saveData} from '../js/common/system.utils'
     var _this = null
     export default {
         props: ['editable',
+            'toObtainData',
             'operator', //button组
             'columnUrl',
             'detailUrl',
@@ -42,24 +43,27 @@
             return {
                 _this: this,
                 labels: [],
-                data: [],
+                data: {},
                 fullscreenLoading: false,
             }
         },
         mounted() {
             this._this = this
             _this = this
-            this.initData();
+            this.initData()
+            console.log('toObtainData---->'+_this.toObtainData)
         },
         created(){
         },
         methods: {
             initData: function(){
-                getColumnData2(this.columnUrl, function (data) {
+                getColumnData(this.columnUrl, function (data) {
                     _this.labels = data.resultInfo.list
-                    getDetailData(_this.detailUrl, _this.params, function (data) {
-                        _this.data = data.resultInfo
-                    });
+                    if(_this.toObtainData){
+                        getDetailData(_this.detailUrl, _this.params, function (data) {
+                            _this.data = data.resultInfo
+                        });
+                    }
                 })
             },
             formHandle: function(action, detail){
